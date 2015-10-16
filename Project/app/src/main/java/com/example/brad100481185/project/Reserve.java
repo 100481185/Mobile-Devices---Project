@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class Reserve extends Activity {
 
@@ -11,6 +12,11 @@ public class Reserve extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserve);
+    }
+
+    public void reserve(View view){
+        //do something
+        finish(); //placed here for now
     }
 
     @Override

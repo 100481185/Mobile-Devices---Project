@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:text="Save"
         android:id="@+id/save_preferences"
+        android:onClick="save"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_marginStart="44dp"
@@ -21,6 +22,7 @@
         android:layout_height="wrap_content"
         android:text="Cancel"
         android:id="@+id/cancel_changes"
+        android:onClick="cancel"
         android:layout_alignBottom="@+id/save_preferences"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="46dp" />

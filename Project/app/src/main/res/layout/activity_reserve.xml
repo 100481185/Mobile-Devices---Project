@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:text="Confirm Reservation"
         android:id="@+id/confirm"
+        android:onClick="reserve"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="42dp" />
