@@ -67,7 +67,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Events will be selected from here, with images of the events being the buttons.  A grid view may also be placed here."
+        android:text="@string/event_placeholder"
         android:id="@+id/main_placeholder"
         android:layout_alignTop="@+id/event_list"
         android:layout_alignParentStart="true" />

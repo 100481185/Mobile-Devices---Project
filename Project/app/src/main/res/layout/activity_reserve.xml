@@ -9,7 +9,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Confirm Reservation"
+        android:text="@string/confirm_reserve"
         android:id="@+id/confirm"
         android:onClick="reserve"
         android:layout_alignParentBottom="true"
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Event information will be placed here.  An image of the event will be placed above."
+        android:text="@string/information_placeholder"
         android:id="@+id/event_information"
         android:layout_marginBottom="33dp"
         android:layout_above="@+id/confirm"

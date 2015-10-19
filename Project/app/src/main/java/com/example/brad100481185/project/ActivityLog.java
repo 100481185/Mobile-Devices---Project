@@ -32,6 +32,11 @@ public class ActivityLog extends Activity {
         //do something
     }
 
+    //return to main menu
+    public void leave(View view){
+        finish();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
