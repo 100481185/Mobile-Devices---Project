@@ -52,6 +52,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.brad100481185.project.ActivityLog" />
         </activity>
+        <activity
+            android:name=".EventSearch"
+            android:label="@string/title_activity_event_search"
+            android:parentActivityName=".Main" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.brad100481185.project.Main" />
+        </activity>
     </application>
 
 </manifest>

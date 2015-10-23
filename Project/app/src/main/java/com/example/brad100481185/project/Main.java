@@ -1,6 +1,9 @@
 package com.example.brad100481185.project;
 
 import android.app.Activity;
+import android.app.SearchManager;
+import android.app.SearchableInfo;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.SearchView;
 import android.widget.Spinner;
 
 public class Main extends Activity {
@@ -27,8 +31,8 @@ public class Main extends Activity {
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(dropdown.getSelectedItemPosition() == 1) eventLog(view);
-                else if(dropdown.getSelectedItemPosition() == 2) preferences(view);
+                if (dropdown.getSelectedItemPosition() == 1) eventLog(view);
+                else if (dropdown.getSelectedItemPosition() == 2) preferences(view);
             }
 
             @Override
@@ -36,6 +40,12 @@ public class Main extends Activity {
 
             }
         });
+
+        //functionality for search bar (to do)
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        final SearchView searchView = (SearchView) findViewById(R.id.searchView);
+        SearchableInfo searchableInfo = searchManager.getSearchableInfo(getComponentName());
+        searchView.setSearchableInfo(searchableInfo);
     }
 
     //proceed to event log activity
@@ -51,7 +61,7 @@ public class Main extends Activity {
     }
 
     //proceed to reservation activity
-    public void eventSelected(View view){
+    public void eventSelected(View view) {
         Intent eventIntent = new Intent(Main.this, Reserve.class);
         startActivity(eventIntent);
     }
