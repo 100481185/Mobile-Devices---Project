@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.brad100481185.project" >
 
+    <uses-permission android:name="android.permission.INTERNET">
+    </uses-permission>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -34,7 +37,11 @@
         </activity>
         <activity
             android:name=".ActivityLog"
-            android:label="@string/title_activity_activity_log" >
+            android:label="@string/title_activity_activity_log"
+            android:parentActivityName=".Main" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.brad100481185.project.Main" />
         </activity>
         <activity
             android:name=".Review"
