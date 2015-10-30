@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,6 +31,9 @@ public class Main extends Activity {
 
     public String urlBASE = "http://localize-seprojects.rhcloud.com/promotions.json";
     public JSONArray arr;
+    public JSONObject obj;
+    public int objIndex;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,14 +136,23 @@ public class Main extends Activity {
     public void eventSelected(View view) {
         Intent eventIntent = new Intent(Main.this, Reserve.class);
         Bundle event = new Bundle();
-        JSONObject obj;
         try{
             switch(view.getId()){
                 case R.id.imageButton:
-                    obj = arr.getJSONObject(1);
+                    obj = arr.getJSONObject(3);
+                    objIndex = 3;
                 break;
+                case R.id.imageButton2:
+                    obj = arr.getJSONObject(2);
+                    objIndex = 2;
+                    break;
+                case R.id.imageButton3:
+                    obj = arr.getJSONObject(1);
+                    objIndex = 1;
+                    break;
                 default:
                     obj = arr.getJSONObject(0);
+                    objIndex = 0;
             }
             event.putString("name", obj.getString("title"));
             event.putString("description", obj.getString("description"));
@@ -147,9 +160,28 @@ public class Main extends Activity {
             event.putString("end", obj.getString("end_date"));
             event.putString("quantity", obj.getString("quantity"));
             eventIntent.putExtras(event);
-            startActivity(eventIntent);
+            startActivityForResult(eventIntent, 1);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int responseCode, Intent resultIntent) {
+        super.onActivityResult(requestCode, responseCode, resultIntent);
+
+        if(responseCode == 1){
+            //update quantity of event
+            try{
+                obj.remove("quantity");
+                obj.put("quantity", resultIntent.getStringExtra("quantity"));
+                arr.put(objIndex, obj);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if(responseCode == -1){
+            //This event is full.
+            Toast.makeText(getApplicationContext(), "This event is full.", Toast.LENGTH_LONG).show();
         }
     }
 

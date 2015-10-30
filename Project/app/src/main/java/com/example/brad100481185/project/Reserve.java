@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 public class Reserve extends Activity {
 
+    int quantity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,6 +19,7 @@ public class Reserve extends Activity {
         Intent event = getIntent();
 
         Bundle info = event.getExtras();
+        quantity = Integer.parseInt(info.getString("quantity"));
 
         //update text view
         String in = info.getString("name") + "\n\n" + info.getString("description") + "\n\n" + "Available: " + info.getString("start") + " to " + info.getString("end") + "\n" + "Tickets Remaining: " + info.getString("quantity");
@@ -25,11 +27,20 @@ public class Reserve extends Activity {
         eventInfo.setText(in);
 
         //update image view (to do)
-        ImageView img = (ImageView)findViewById(R.id.imageView);
+        ImageView img = (ImageView) findViewById(R.id.imageView);
     }
 
     public void reserve(View view){
-        //do something
+        Intent confirmReserve = new Intent(Intent.ACTION_PICK);
+        if(quantity > 0){
+            quantity--;
+            Bundle newQuantity = new Bundle();
+            newQuantity.putString("quantity", String.valueOf(quantity));
+            confirmReserve.putExtras(newQuantity);
+            setResult(1, confirmReserve);
+        } else {
+            setResult(-1, confirmReserve);
+        }
         finish(); //placed here for now
     }
 
