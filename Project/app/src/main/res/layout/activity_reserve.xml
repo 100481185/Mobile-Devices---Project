@@ -22,8 +22,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/information_placeholder"
         android:id="@+id/event_information"
-        android:layout_marginBottom="33dp"
-        android:layout_above="@+id/confirm"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true" />
 
     <ImageView
@@ -32,7 +32,7 @@
         android:id="@+id/imageView"
         android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/event_information"
-        android:layout_above="@+id/event_information"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/event_information" />
 
 </RelativeLayout>

@@ -131,7 +131,26 @@ public class Main extends Activity {
     //proceed to reservation activity
     public void eventSelected(View view) {
         Intent eventIntent = new Intent(Main.this, Reserve.class);
-        startActivity(eventIntent);
+        Bundle event = new Bundle();
+        JSONObject obj;
+        try{
+            switch(view.getId()){
+                case R.id.imageButton:
+                    obj = arr.getJSONObject(1);
+                break;
+                default:
+                    obj = arr.getJSONObject(0);
+            }
+            event.putString("name", obj.getString("title"));
+            event.putString("description", obj.getString("description"));
+            event.putString("start", obj.getString("date_of_creation"));
+            event.putString("end", obj.getString("end_date"));
+            event.putString("quantity", obj.getString("quantity"));
+            eventIntent.putExtras(event);
+            startActivity(eventIntent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -1,10 +1,13 @@
 package com.example.brad100481185.project;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class Reserve extends Activity {
 
@@ -12,6 +15,17 @@ public class Reserve extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserve);
+        Intent event = getIntent();
+
+        Bundle info = event.getExtras();
+
+        //update text view
+        String in = info.getString("name") + "\n\n" + info.getString("description") + "\n\n" + "Available: " + info.getString("start") + " to " + info.getString("end") + "\n" + "Tickets Remaining: " + info.getString("quantity");
+        TextView eventInfo = (TextView)findViewById(R.id.event_information);
+        eventInfo.setText(in);
+
+        //update image view (to do)
+        ImageView img = (ImageView)findViewById(R.id.imageView);
     }
 
     public void reserve(View view){
