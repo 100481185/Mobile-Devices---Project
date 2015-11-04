@@ -15,19 +15,19 @@ public class ActivityLog extends Activity {
         setContentView(R.layout.activity_activity_log);
     }
 
-    //proceed to review activity
+    //todo: proceed to review activity
     public void review(View view){
         Intent reviewIntent = new Intent(ActivityLog.this, Review.class);
         startActivity(reviewIntent);
     }
 
-    //proceed to reservation code activity
+    //todo: proceed to reservation code activity
     public void reservationCode(View view){
         Intent codeIntent = new Intent(ActivityLog.this, ReservationCode.class);
         startActivity(codeIntent);
     }
 
-    //cancel reservation of event
+    //todo: cancel reservation of event
     public void cancelReservation(View view){
         //do something
     }

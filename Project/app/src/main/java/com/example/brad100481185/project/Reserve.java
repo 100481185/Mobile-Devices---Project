@@ -2,16 +2,27 @@ package com.example.brad100481185.project;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 public class Reserve extends Activity {
 
     int quantity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,8 +37,28 @@ public class Reserve extends Activity {
         TextView eventInfo = (TextView)findViewById(R.id.event_information);
         eventInfo.setText(in);
 
-        //update image view (to do)
-        ImageView img = (ImageView) findViewById(R.id.imageView);
+        //update image view
+        GetBanner banner = new GetBanner();
+        banner.execute(info.getString("img"));
+    }
+
+    class GetBanner extends AsyncTask<String, Void, Drawable> {
+        private Drawable banner;
+
+        protected Drawable doInBackground(String... params){
+            try{
+                InputStream is = (InputStream) new URL(params[0]).getContent();
+                banner = Drawable.createFromStream(is, "banner");
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+            return banner;
+        }
+
+        protected void onPostExecute(Drawable d){
+            ImageView img = (ImageView)findViewById(R.id.imageView);
+            img.setImageDrawable(banner);
+        }
     }
 
     public void reserve(View view){

@@ -5,14 +5,17 @@ import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -30,6 +33,7 @@ import java.net.URL;
 public class Main extends Activity {
 
     public String urlBASE = "http://localize-seprojects.rhcloud.com/promotions.json";
+    public String urlMAIN = "http://localize-seprojects.rhcloud.com";
     public JSONArray arr;
     public JSONObject obj;
     public int objIndex;
@@ -58,7 +62,7 @@ public class Main extends Activity {
             }
         });
 
-        //functionality for search bar (to do)
+        //todo: functionality of search bar
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         final SearchView searchView = (SearchView) findViewById(R.id.searchView);
         SearchableInfo searchableInfo = searchManager.getSearchableInfo(getComponentName());
@@ -67,6 +71,18 @@ public class Main extends Activity {
         DownloadOriginTask downloadOriginTask = new DownloadOriginTask();
         downloadOriginTask.execute(urlBASE);
     }
+
+    private Drawable getImage(String urlIMG){
+        try{
+            InputStream input = (InputStream) new URL(urlIMG).getContent();
+            Drawable banner = Drawable.createFromStream(input, "src name");
+            return banner;
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     class DownloadOriginTask extends AsyncTask<String, Void, String> {
         private Exception exception = null;
         private String str = null;
@@ -84,7 +100,7 @@ public class Main extends Activity {
                 InputStream in = new BufferedInputStream(conn.getInputStream());
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in));
                 StringBuilder sb = new StringBuilder();
-                String line = "";
+                String line;
                 while((line = reader.readLine()) != null){
                     sb.append(line+"\n");
                 }
@@ -93,16 +109,7 @@ public class Main extends Activity {
 
                 //parse string to JSON array
                 arr = new JSONArray(str);
-
-                for(int i=0; i<arr.length(); i++){
-                    JSONObject c = arr.getJSONObject(i);
-
-                    String id = c.getString("id");
-                    String title = c.getString("title");
-                    String description = c.getString("description");
-
-                    Log.i("JSON", id+" "+title+" "+description);
-                }
+                imgButton();
             } catch (Exception e) {
                 e.printStackTrace();
                 exception = e;
@@ -120,13 +127,38 @@ public class Main extends Activity {
         }
     }
 
-    //proceed to event log activity
+    //obtains banner url from JSON array and adds it to imageButton
+    private void imgButton(){
+        for(int a = 0; a < arr.length(); a++){
+            try{
+                String urlIMG = urlMAIN + arr.getJSONObject(a).getString("banner");
+                Drawable i = getImage(urlIMG);
+                if(a == 0){
+                    ImageButton img = (ImageButton)findViewById(R.id.imageButton4);
+                    img.setImageDrawable(i);
+                } else if(a == 1){
+                    ImageButton img = (ImageButton)findViewById(R.id.imageButton3);
+                    img.setImageDrawable(i);
+                } else if(a == 2){
+                    ImageButton img = (ImageButton)findViewById(R.id.imageButton2);
+                    img.setImageDrawable(i);
+                } else if(a == 3){
+                    ImageButton img = (ImageButton)findViewById(R.id.imageButton);
+                    img.setImageDrawable(i);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //todo: proceed to event log activity
     public void eventLog(View view){
         Intent logIntent = new Intent(Main.this, ActivityLog.class);
         startActivity(logIntent);
     }
 
-    //proceed to preferences activity
+    //todo: proceed to preferences activity
     public void preferences(View view){
         Intent preferenceIntent = new Intent(Main.this, Preferences.class);
         startActivity(preferenceIntent);
@@ -139,26 +171,43 @@ public class Main extends Activity {
         try{
             switch(view.getId()){
                 case R.id.imageButton:
-                    obj = arr.getJSONObject(3);
-                    objIndex = 3;
-                break;
+                    if(arr.getJSONObject(3) != null){
+                        obj = arr.getJSONObject(3);
+                        objIndex = 3;
+                        break;
+                    } else {
+                        return;
+                    }
                 case R.id.imageButton2:
-                    obj = arr.getJSONObject(2);
-                    objIndex = 2;
-                    break;
+                    if(arr.getJSONObject(2) != null){
+                        obj = arr.getJSONObject(2);
+                        objIndex = 2;
+                        break;
+                    } else {
+                        return;
+                    }
                 case R.id.imageButton3:
-                    obj = arr.getJSONObject(1);
-                    objIndex = 1;
-                    break;
+                    if(arr.getJSONObject(1) != null){
+                        obj = arr.getJSONObject(1);
+                        objIndex = 1;
+                        break;
+                    } else {
+                        return;
+                    }
                 default:
-                    obj = arr.getJSONObject(0);
-                    objIndex = 0;
+                    if(arr.getJSONObject(0) != null){
+                        obj = arr.getJSONObject(0);
+                        objIndex = 0;
+                    } else {
+                        return;
+                    }
             }
             event.putString("name", obj.getString("title"));
             event.putString("description", obj.getString("description"));
             event.putString("start", obj.getString("date_of_creation"));
             event.putString("end", obj.getString("end_date"));
             event.putString("quantity", obj.getString("quantity"));
+            event.putString("img", urlMAIN + obj.getString("banner"));
             eventIntent.putExtras(event);
             startActivityForResult(eventIntent, 1);
         } catch (Exception e) {
@@ -176,6 +225,7 @@ public class Main extends Activity {
                 obj.remove("quantity");
                 obj.put("quantity", resultIntent.getStringExtra("quantity"));
                 arr.put(objIndex, obj);
+                //todo: send change request to server
             } catch (Exception e) {
                 e.printStackTrace();
             }

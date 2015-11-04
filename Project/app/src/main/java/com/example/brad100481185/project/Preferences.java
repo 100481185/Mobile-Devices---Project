@@ -14,7 +14,7 @@ public class Preferences extends Activity {
         setContentView(R.layout.activity_preferences);
     }
 
-    //pressing the save button
+    //todo: pressing the save button
     public void save(View view){
         //do something
         finish();
