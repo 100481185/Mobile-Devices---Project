@@ -32,15 +32,14 @@ public class EventSearch extends Activity {
 
     private void handleIntent(Intent intent) {
 
-        //todo: make search intent work
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            Log.i("E", "It works!");
             String query = intent.getStringExtra(SearchManager.QUERY);
             ObtainDataTask data = new ObtainDataTask();
             data.execute(urlBASE, query);
         }
     }
 
+    //todo: display events with search query; go to reservation activity from there
     class ObtainDataTask extends AsyncTask<String, Void, String>{
         private Exception exception = null;
         private String str = null;
@@ -88,10 +87,12 @@ public class EventSearch extends Activity {
             try{
                 for(int a = 0; a < arr.length(); a++){
                     if(arr.getJSONObject(a).getString("title").contains(query)) {
-                        Toast.makeText(getApplicationContext(), query + " is in title", Toast.LENGTH_LONG).show();
+                        Log.i("T", query + " is in title");
                     } else if(arr.getJSONObject(a).getString("description").contains(query)){
-                        Toast.makeText(getApplicationContext(), query + " is in description", Toast.LENGTH_LONG).show();
-                    } else Toast.makeText(getApplicationContext(), query + " is not here", Toast.LENGTH_LONG).show();
+                        Log.i("D", query + " is in description");
+                    } else {
+                        Log.i("N", query + " is not here");
+                    }
                 }
             } catch(Exception e){
                 e.printStackTrace();
