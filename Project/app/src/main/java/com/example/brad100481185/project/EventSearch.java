@@ -86,10 +86,10 @@ public class EventSearch extends Activity {
 
             try{
                 for(int a = 0; a < arr.length(); a++){
-                    if(arr.getJSONObject(a).getString("title").contains(query)) {
-                        Log.i("T", query + " is in title");
-                    } else if(arr.getJSONObject(a).getString("description").contains(query)){
-                        Log.i("D", query + " is in description");
+                    if(arr.getJSONObject(a).getString("title").contains(query.toLowerCase())) {
+                        Log.i("T", arr.getJSONObject(a).getString("title"));
+                    } else if(arr.getJSONObject(a).getString("description").contains(query.toLowerCase())){
+                        Log.i("D", arr.getJSONObject(a).getString("title"));
                     } else {
                         Log.i("N", query + " is not here");
                     }
