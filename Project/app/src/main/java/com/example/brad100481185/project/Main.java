@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -143,34 +144,64 @@ public class Main extends Activity {
                 String urlIMG = urlMAIN + arr.getJSONObject(a).getString("banner");
                 Drawable i = getImage(urlIMG);
                 if(a == 0){
-                    ImageButton img = (ImageButton)findViewById(R.id.imageButton10);
+                    TextView cap = (TextView)findViewById(R.id.caption);
+                    cap.setText(arr.getJSONObject(a).getString("title") + "\nPrice: $" + arr.getJSONObject(a).getString("price"));
+
+                    ImageButton img = (ImageButton)findViewById(R.id.imageButton);
                     img.setImageDrawable(i);
                 } else if(a == 1){
-                    ImageButton img = (ImageButton)findViewById(R.id.imageButton9);
-                    img.setImageDrawable(i);
-                } else if(a == 2){
-                    ImageButton img = (ImageButton)findViewById(R.id.imageButton8);
-                    img.setImageDrawable(i);
-                } else if(a == 3){
-                    ImageButton img = (ImageButton)findViewById(R.id.imageButton7);
-                    img.setImageDrawable(i);
-                } else if(a == 4){
-                    ImageButton img = (ImageButton)findViewById(R.id.imageButton6);
-                    img.setImageDrawable(i);
-                } else if(a == 5){
-                    ImageButton img = (ImageButton)findViewById(R.id.imageButton5);
-                    img.setImageDrawable(i);
-                } else if(a == 6){
-                    ImageButton img = (ImageButton)findViewById(R.id.imageButton4);
-                    img.setImageDrawable(i);
-                } else if(a == 7){
-                    ImageButton img = (ImageButton)findViewById(R.id.imageButton3);
-                    img.setImageDrawable(i);
-                } else if(a == 8){
+                    TextView cap = (TextView)findViewById(R.id.caption2);
+                    cap.setText(arr.getJSONObject(a).getString("title") + "\nPrice: $" + arr.getJSONObject(a).getString("price"));
+
                     ImageButton img = (ImageButton)findViewById(R.id.imageButton2);
                     img.setImageDrawable(i);
+                } else if(a == 2){
+                    TextView cap = (TextView)findViewById(R.id.caption3);
+                    cap.setText(arr.getJSONObject(a).getString("title") + "\nPrice: $" + arr.getJSONObject(a).getString("price"));
+
+                    ImageButton img = (ImageButton)findViewById(R.id.imageButton3);
+                    img.setImageDrawable(i);
+                } else if(a == 3){
+                    TextView cap = (TextView)findViewById(R.id.caption4);
+                    cap.setText(arr.getJSONObject(a).getString("title") + "\nPrice: $" + arr.getJSONObject(a).getString("price"));
+
+                    ImageButton img = (ImageButton)findViewById(R.id.imageButton4);
+                    img.setImageDrawable(i);
+                } else if(a == 4){
+                    TextView cap = (TextView)findViewById(R.id.caption5);
+                    cap.setText(arr.getJSONObject(a).getString("title") + "\nPrice: $" + arr.getJSONObject(a).getString("price"));
+
+                    ImageButton img = (ImageButton)findViewById(R.id.imageButton5);
+                    img.setImageDrawable(i);
+                } else if(a == 5){
+                    TextView cap = (TextView)findViewById(R.id.caption6);
+                    cap.setText(arr.getJSONObject(a).getString("title") + "\nPrice: $" + arr.getJSONObject(a).getString("price"));
+
+                    ImageButton img = (ImageButton)findViewById(R.id.imageButton6);
+                    img.setImageDrawable(i);
+                } else if(a == 6){
+                    TextView cap = (TextView)findViewById(R.id.caption7);
+                    cap.setText(arr.getJSONObject(a).getString("title") + "\nPrice: $" + arr.getJSONObject(a).getString("price"));
+
+                    ImageButton img = (ImageButton)findViewById(R.id.imageButton7);
+                    img.setImageDrawable(i);
+                } else if(a == 7){
+                    TextView cap = (TextView)findViewById(R.id.caption8);
+                    cap.setText(arr.getJSONObject(a).getString("title") + "\nPrice: $" + arr.getJSONObject(a).getString("price"));
+
+                    ImageButton img = (ImageButton)findViewById(R.id.imageButton8);
+                    img.setImageDrawable(i);
+                } else if(a == 8){
+                    TextView cap = (TextView)findViewById(R.id.caption9);
+                    cap.setText(arr.getJSONObject(a).getString("title") + "\nPrice: $" + arr.getJSONObject(a).getString("price"));
+
+                    ImageButton img = (ImageButton)findViewById(R.id.imageButton9);
+                    img.setImageDrawable(i);
                 } else if(a == 9){
-                    ImageButton img = (ImageButton)findViewById(R.id.imageButton);
+                    TextView cap = (TextView)findViewById(R.id.caption10);
+                    cap.setText(arr.getJSONObject(a).getString("title") + "\nPrice: $" + arr.getJSONObject(a).getString("price"));
+
+                    ImageButton img = (ImageButton)findViewById(R.id.imageButton10);
                     img.setImageDrawable(i);
                 }
             } catch (Exception e) {
@@ -198,44 +229,44 @@ public class Main extends Activity {
         try{
             switch(view.getId()){
                 case R.id.imageButton:
-                    obj = arr.getJSONObject(9);
-                    objIndex = 9;
+                    obj = arr.getJSONObject(0);
+                    objIndex = 0;
                     break;
                 case R.id.imageButton2:
-                    obj = arr.getJSONObject(8);
-                    objIndex = 8;
-                    break;
-                case R.id.imageButton3:
-                    obj = arr.getJSONObject(7);
-                    objIndex = 7;
-                    break;
-                case R.id.imageButton4:
-                    obj = arr.getJSONObject(6);
-                    objIndex = 6;
-                    break;
-                case R.id.imageButton5:
-                    obj = arr.getJSONObject(5);
-                    objIndex = 5;
-                    break;
-                case R.id.imageButton6:
-                    obj = arr.getJSONObject(4);
-                    objIndex = 4;
-                    break;
-                case R.id.imageButton7:
-                    obj = arr.getJSONObject(3);
-                    objIndex = 3;
-                    break;
-                case R.id.imageButton8:
-                    obj = arr.getJSONObject(2);
-                    objIndex = 2;
-                    break;
-                case R.id.imageButton9:
                     obj = arr.getJSONObject(1);
                     objIndex = 1;
                     break;
+                case R.id.imageButton3:
+                    obj = arr.getJSONObject(2);
+                    objIndex = 2;
+                    break;
+                case R.id.imageButton4:
+                    obj = arr.getJSONObject(3);
+                    objIndex = 3;
+                    break;
+                case R.id.imageButton5:
+                    obj = arr.getJSONObject(4);
+                    objIndex = 4;
+                    break;
+                case R.id.imageButton6:
+                    obj = arr.getJSONObject(5);
+                    objIndex = 5;
+                    break;
+                case R.id.imageButton7:
+                    obj = arr.getJSONObject(6);
+                    objIndex = 6;
+                    break;
+                case R.id.imageButton8:
+                    obj = arr.getJSONObject(7);
+                    objIndex = 7;
+                    break;
+                case R.id.imageButton9:
+                    obj = arr.getJSONObject(8);
+                    objIndex = 8;
+                    break;
                 default:
-                    obj = arr.getJSONObject(0);
-                    objIndex = 0;
+                    obj = arr.getJSONObject(9);
+                    objIndex = 9;
             }
             event.putString("name", obj.getString("title"));
             event.putString("description", obj.getString("description"));
@@ -257,16 +288,62 @@ public class Main extends Activity {
         if(responseCode == 1){
             //update quantity of event
             try{
+                String urlResponse = urlMAIN + "/promotions/" + obj.getString("id") + "/reserve.json";
+                Log.i("LNK", urlResponse);
                 obj.remove("quantity");
                 obj.put("quantity", resultIntent.getStringExtra("quantity"));
                 arr.put(objIndex, obj);
-                //todo: send change request to server
+
+                ChangeQuantityTask change = new ChangeQuantityTask();
+                change.execute(urlResponse);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else if(responseCode == -1){
             //This event is full.
             Toast.makeText(getApplicationContext(), "This event is full.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    class ChangeQuantityTask extends AsyncTask<String, Void, String>{
+        private Exception exception = null;
+        private String resp = null;
+
+        protected String doInBackground(String... params){
+            try {
+                //get JSON from url
+                URL url = new URL(params[0]);
+                HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                conn.setDoInput(true);
+                conn.setChunkedStreamingMode(0);
+
+                //read JSON file from inputStream
+                InputStream in = new BufferedInputStream(conn.getInputStream());
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while((line = reader.readLine()) != null){
+                    sb.append(line+"\n");
+                }
+                in.close();
+                resp = sb.toString();
+
+                //parse string to JSON array
+            } catch (Exception e) {
+                e.printStackTrace();
+                exception = e;
+            }
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (exception != null) {
+                exception.printStackTrace();
+                return;
+            }
+
+            Log.i("RE", resp);
         }
     }
 
