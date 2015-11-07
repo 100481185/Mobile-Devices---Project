@@ -24,4 +24,7 @@
     <string name="event_placeholder">Events will be selected from here, with images of the events being the buttons.  A grid view may also be placed here.</string>
     <string name="information_placeholder">Event information will be placed here.  An image of the event will be placed above.</string>
     <string name="code_placeholder">Reservation code for event will be shown here.</string>
+
+    <string name="label">Search</string>
+    <string name="hint">Hint</string>
 </resources>

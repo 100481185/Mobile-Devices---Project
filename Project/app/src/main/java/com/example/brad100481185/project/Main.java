@@ -3,6 +3,7 @@ package com.example.brad100481185.project;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -289,7 +290,6 @@ public class Main extends Activity {
             //update quantity of event
             try{
                 String urlResponse = urlMAIN + "/promotions/" + obj.getString("id") + "/reserve.json";
-                Log.i("LNK", urlResponse);
 
                 ChangeQuantityTask change = new ChangeQuantityTask();
                 change.execute(urlResponse, resultIntent.getStringExtra("quantity"));
@@ -367,7 +367,8 @@ public class Main extends Activity {
         //todo: functionality of search bar
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        ComponentName cn = new ComponentName(this, EventSearch.class);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(cn));
 
         return true;
     }
