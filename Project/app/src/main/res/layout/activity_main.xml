@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/caption"
                     android:layout_gravity="center_horizontal|bottom|left"
-                    android:layout_marginTop="100dp" />
+                    android:layout_marginTop="50dp" />
             </FrameLayout>
 
             <FrameLayout android:layout_marginLeft="20dp"
@@ -73,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/caption2"
                     android:layout_gravity="center_horizontal|bottom|left"
-                    android:layout_marginTop="50dp"   />
+                    android:layout_marginTop="80dp"   />
             </FrameLayout>
 
             <FrameLayout android:layout_marginLeft="20dp"
@@ -96,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/caption3"
                     android:layout_gravity="center_horizontal|bottom|left"
-                    android:layout_marginTop="70dp"   />
+                    android:layout_marginTop="55dp"   />
             </FrameLayout>
 
             <FrameLayout android:layout_marginLeft="20dp"
@@ -211,7 +211,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/caption8"
                     android:layout_gravity="center_horizontal|bottom|left"
-                    android:layout_marginTop="55dp"   />
+                    android:layout_marginTop="80dp"   />
             </FrameLayout>
 
             <FrameLayout android:layout_marginLeft="20dp"
@@ -234,7 +234,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/caption9"
                     android:layout_gravity="center_horizontal|bottom|left"
-                    android:layout_marginTop="80dp"  />
+                    android:layout_marginTop="50dp"  />
             </FrameLayout>
 
             <FrameLayout
@@ -256,7 +256,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/caption10"
                     android:layout_gravity="center_horizontal|bottom|left"
-                    android:layout_marginTop="50dp"  />
+                    android:layout_marginTop="100dp"  />
             </FrameLayout>
 
         </GridLayout>

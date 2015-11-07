@@ -290,12 +290,9 @@ public class Main extends Activity {
             try{
                 String urlResponse = urlMAIN + "/promotions/" + obj.getString("id") + "/reserve.json";
                 Log.i("LNK", urlResponse);
-                obj.remove("quantity");
-                obj.put("quantity", resultIntent.getStringExtra("quantity"));
-                arr.put(objIndex, obj);
 
                 ChangeQuantityTask change = new ChangeQuantityTask();
-                change.execute(urlResponse);
+                change.execute(urlResponse, resultIntent.getStringExtra("quantity"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -308,9 +305,13 @@ public class Main extends Activity {
     class ChangeQuantityTask extends AsyncTask<String, Void, String>{
         private Exception exception = null;
         private String resp = null;
+        private String quantity = null;
+        private JSONObject response = null;
 
         protected String doInBackground(String... params){
             try {
+                quantity = params[1];
+
                 //get JSON from url
                 URL url = new URL(params[0]);
                 HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -328,7 +329,7 @@ public class Main extends Activity {
                 in.close();
                 resp = sb.toString();
 
-                //parse string to JSON array
+                response = new JSONObject(resp);
             } catch (Exception e) {
                 e.printStackTrace();
                 exception = e;
@@ -342,8 +343,19 @@ public class Main extends Activity {
                 exception.printStackTrace();
                 return;
             }
-
-            Log.i("RE", resp);
+            try{
+                if(response.getString("status").equalsIgnoreCase("ok")){
+                    obj.remove("quantity");
+                    obj.put("quantity", quantity);
+                    arr.put(objIndex, obj);
+                    Toast.makeText(getApplicationContext(), "Reservation success", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Reservation failed", Toast.LENGTH_LONG).show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                exception = e;
+            }
         }
     }
 
