@@ -21,6 +21,7 @@ import java.net.URL;
 
 public class Reserve extends Activity {
 
+    final int MAX = Integer.MAX_VALUE;
     int quantity;
 
     @Override
@@ -30,10 +31,19 @@ public class Reserve extends Activity {
         Intent event = getIntent();
 
         Bundle info = event.getExtras();
-        quantity = Integer.parseInt(info.getString("quantity"));
+
+        String quantityString = "Unlimited";
+        if (!info.getString("quantity").equals("-1") && !info.getString("quantity").equals(String.valueOf(Integer.MAX_VALUE))){
+            quantity = Integer.parseInt(info.getString("quantity"));
+            quantityString = info.getString("quantity");
+        } else quantity = MAX;
+
+        String hasEnd = "";
+        if(!info.getString("end").equals("null"))
+            hasEnd = " to " + info.getString("end");
 
         //update text view
-        String in = info.getString("name") + "\n\n" + info.getString("description") + "\n\n" + "Available: " + info.getString("start") + " to " + info.getString("end") + "\n" + "Tickets Remaining: " + info.getString("quantity");
+        String in = info.getString("name") + "\n\n" + info.getString("description") + "\n\n" + "Available: " + info.getString("start") + hasEnd + "\n" + "Tickets Remaining: " + quantityString;
         TextView eventInfo = (TextView)findViewById(R.id.event_information);
         eventInfo.setText(in);
 
@@ -64,7 +74,7 @@ public class Reserve extends Activity {
     public void reserve(View view){
         Intent confirmReserve = new Intent(Intent.ACTION_PICK);
         if(quantity > 0){
-            quantity--;
+            if(quantity != MAX) quantity--;
             Bundle newQuantity = new Bundle();
             newQuantity.putString("quantity", String.valueOf(quantity));
             confirmReserve.putExtras(newQuantity);
