@@ -2,17 +2,14 @@ package com.example.brad100481185.project;
 
 import android.app.Activity;
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -217,6 +214,7 @@ public class EventSearch extends Activity {
             try{
                 //search json data for query
                 int index = 0;
+                TextView found = (TextView)findViewById(R.id.failed);
                 for(int a = 0; a < arr.length(); a++){
                     if(arr.getJSONObject(a).getString("title").toLowerCase().contains(query.toLowerCase())) {
                         res.add(index, arr.getJSONObject(a).getString("title"));
@@ -225,9 +223,13 @@ public class EventSearch extends Activity {
                         res.add(index, arr.getJSONObject(a).getString("title"));
                         index++;
                     }
+                } if(res.isEmpty()){
+                    found.setText("No results found for " + query);
+                } else {
+                    found.setText(index + " result(s) found for " + query);
+                    ArrayAdapter<String> adapt = new ArrayAdapter<String>(EventSearch.this,android.R.layout.simple_list_item_1, res);
+                    list.setAdapter(adapt);
                 }
-                ArrayAdapter<String> adapt = new ArrayAdapter<String>(EventSearch.this,android.R.layout.simple_list_item_1, res);
-                list.setAdapter(adapt);
             } catch(Exception e){
                 e.printStackTrace();
             }
