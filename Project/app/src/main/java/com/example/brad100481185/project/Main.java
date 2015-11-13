@@ -46,25 +46,6 @@ public class Main extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //functionality for drop down menu
-        final Spinner dropdown = (Spinner)findViewById(R.id.dropdownmenu);
-        String[] items = new String[]{"--select--", "Event Log", "Preferences"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
-        dropdown.setAdapter(adapter);
-
-        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (dropdown.getSelectedItemPosition() == 1) eventLog(view);
-                else if (dropdown.getSelectedItemPosition() == 2) preferences(view);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
         DownloadOriginTask downloadOriginTask = new DownloadOriginTask();
         downloadOriginTask.execute(urlBASE);
     }
@@ -212,13 +193,13 @@ public class Main extends Activity {
     }
 
     //todo: proceed to event log activity
-    public void eventLog(View view){
+    public void eventLog(MenuItem item){
         Intent logIntent = new Intent(Main.this, ActivityLog.class);
         startActivity(logIntent);
     }
 
     //todo: proceed to preferences activity
-    public void preferences(View view){
+    public void preferences(MenuItem item){
         Intent preferenceIntent = new Intent(Main.this, Preferences.class);
         startActivity(preferenceIntent);
     }
@@ -379,11 +360,16 @@ public class Main extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch(id) {
+            case R.id.preferences:
+                preferences(item);
+                break;
+            case R.id.activity_log:
+                eventLog(item);
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
