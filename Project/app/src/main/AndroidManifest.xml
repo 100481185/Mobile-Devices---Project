@@ -2,14 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.brad100481185.project" >
 
-    <uses-permission android:name="android.permission.INTERNET">
-    </uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <uses-library android:name="com.google.android.maps" />
         <activity
             android:name=".Main"
             android:label="@string/app_name" >

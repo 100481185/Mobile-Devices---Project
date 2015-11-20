@@ -2,21 +2,14 @@ package com.example.brad100481185.project;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.BufferedInputStream;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class Reserve extends Activity {

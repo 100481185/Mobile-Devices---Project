@@ -2,8 +2,6 @@ package com.example.brad100481185.project;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 public class Review extends Activity {
 
@@ -12,4 +10,6 @@ public class Review extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
     }
+
+    //todo: add functionality
 }

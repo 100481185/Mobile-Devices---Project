@@ -1,25 +1,30 @@
 package com.example.brad100481185.project;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.SearchManager;
-import android.app.SearchableInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.SearchView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,12 +33,15 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
+import java.util.Locale;
 
-public class Main extends Activity {
+public class Main extends Activity implements LocationListener {
 
     public String urlBASE = "http://localize-seprojects.rhcloud.com/promotions.json";
     public String urlMAIN = "http://localize-seprojects.rhcloud.com";
@@ -41,13 +49,100 @@ public class Main extends Activity {
     public JSONObject obj;
     public int objIndex;
 
+    private double latitude, longitude;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DownloadOriginTask downloadOriginTask = new DownloadOriginTask();
-        downloadOriginTask.execute(urlBASE);
+        requestLocationPermissions();
+        obtainLocation();
+    }
+
+    final int PERMISSIONS_REQUEST_ACCESS_LOCATION = 410020;
+    private void requestLocationPermissions() {
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // Explain to the user why we need to read the contacts
+            }
+
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_LOCATION);
+
+            return;
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ACCESS_LOCATION: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    obtainLocation();
+                } else {
+                    // tell the user that the feature will not work
+                }
+                return;
+            }
+        }
+    }
+
+    private void obtainLocation(){
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            LocationManager locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
+
+            // request an fine location provider
+            Criteria criteria = new Criteria();
+            criteria.setAccuracy(Criteria.ACCURACY_FINE);
+            criteria.setPowerRequirement(Criteria.POWER_MEDIUM);
+            criteria.setAltitudeRequired(false);
+            criteria.setBearingRequired(false);
+            criteria.setSpeedRequired(false);
+            criteria.setCostAllowed(false);
+            String recommended = locationManager.getBestProvider(criteria, true);
+
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
+
+            Location location = locationManager.getLastKnownLocation(recommended);
+            if (location != null) {
+                if (Geocoder.isPresent()) {
+                    Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+                    try {
+                        // reverse geocode from current GPS position
+                        List<Address> results = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+
+                        if (results.size() > 0) {
+                            latitude = location.getLatitude();
+                            longitude = location.getLongitude();
+
+                            DownloadOriginTask downloadOriginTask = new DownloadOriginTask();
+                            downloadOriginTask.execute(urlBASE);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    public void onLocationChanged(Location location) {
+        obtainLocation();
     }
 
     class DownloadOriginTask extends AsyncTask<String, Void, String> {
@@ -73,6 +168,9 @@ public class Main extends Activity {
                 }
                 in.close();
                 str = sb.toString();
+
+                //todo: sort by how close an event is to location
+                //(involves private doubles latitude and longitude
 
                 //parse string to JSON array
                 arr = new JSONArray(str);
@@ -124,8 +222,7 @@ public class Main extends Activity {
         for(int a = 0; a < arr.length(); a++){
             try{
                 String urlIMG = urlMAIN + arr.getJSONObject(a).getString("banner");
-                Drawable i = getImage(urlIMG);
-                if(a == 0){
+                Drawable i = getImage(urlIMG);if(a == 0){
                     TextView cap = (TextView)findViewById(R.id.caption);
                     cap.setText(arr.getJSONObject(a).getString("title") + "\nPrice: $" + arr.getJSONObject(a).getString("price"));
 

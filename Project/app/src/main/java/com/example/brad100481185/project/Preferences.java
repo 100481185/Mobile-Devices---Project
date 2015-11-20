@@ -2,8 +2,6 @@ package com.example.brad100481185.project;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 public class Preferences extends Activity {
