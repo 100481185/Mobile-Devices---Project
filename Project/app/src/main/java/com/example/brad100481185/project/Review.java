@@ -1,7 +1,9 @@
 package com.example.brad100481185.project;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 public class Review extends Activity {
 
@@ -12,4 +14,8 @@ public class Review extends Activity {
     }
 
     //todo: add functionality
+    public void write(View view){
+        Intent writeIntent = new Intent(Review.this, WriteReview.class);
+        startActivity(writeIntent);
+    }
 }
