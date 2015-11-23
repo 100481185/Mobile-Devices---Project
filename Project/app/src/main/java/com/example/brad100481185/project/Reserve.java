@@ -36,7 +36,7 @@ public class Reserve extends Activity {
             hasEnd = " to " + info.getString("end");
 
         //update text view
-        String in = info.getString("name") + "\n\n" + info.getString("description") + "\n\n" + "Available: " + info.getString("start") + hasEnd + "\n" + "Tickets Remaining: " + quantityString;
+        String in = info.getString("name") + "\n\n" + info.getString("description") + "\n\n" + "Available: " + info.getString("start") + hasEnd + "\n" + "Tickets Remaining: " + quantityString + "\n" + "Cost: $" + info.getString("price");
         TextView eventInfo = (TextView)findViewById(R.id.event_information);
         eventInfo.setText(in);
 

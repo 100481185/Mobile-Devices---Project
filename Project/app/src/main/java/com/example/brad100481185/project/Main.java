@@ -353,6 +353,7 @@ public class Main extends Activity implements LocationListener {
             event.putString("end", obj.getString("valid_to"));
             event.putString("quantity", obj.getString("quantity"));
             event.putString("img", urlMAIN + obj.getString("banner"));
+            event.putString("price", obj.getString("price"));
             eventIntent.putExtras(event);
             startActivityForResult(eventIntent, 1);
         } catch (Exception e) {
