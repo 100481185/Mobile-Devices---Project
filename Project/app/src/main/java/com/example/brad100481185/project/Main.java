@@ -48,8 +48,10 @@ public class Main extends Activity implements LocationListener {
     public JSONArray arr;
     public JSONObject obj;
     public int objIndex;
+    private boolean loggedIn = false;
 
     private double latitude, longitude;
+    private String newQuantity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -368,16 +370,32 @@ public class Main extends Activity implements LocationListener {
         if(responseCode == 1){
             //update quantity of event
             try{
-                String urlResponse = urlMAIN + "/promotions/" + obj.getString("id") + "/reserve.json";
-
-                ChangeQuantityTask change = new ChangeQuantityTask();
-                change.execute(urlResponse, resultIntent.getStringExtra("quantity"));
+                newQuantity = resultIntent.getStringExtra("quantity");
+                if(!loggedIn){
+                    startActivityForResult(new Intent(this, Login.class), 2);
+                } else {
+                    reserveRequest();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if(responseCode == -1){
+        } else if(responseCode == 2) {
+            reserveRequest();
+        }
+        else if(responseCode == -1){
             //This event is full.
             Toast.makeText(getApplicationContext(), "This event is full.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void reserveRequest(){
+        try{
+            String urlResponse = urlMAIN + "/promotions/" + obj.getString("id") + "/reserve.json";
+
+            ChangeQuantityTask change = new ChangeQuantityTask();
+            change.execute(urlResponse, newQuantity);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
