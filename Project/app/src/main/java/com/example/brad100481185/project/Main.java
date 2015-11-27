@@ -380,6 +380,7 @@ public class Main extends Activity implements LocationListener {
                 e.printStackTrace();
             }
         } else if(responseCode == 2) {
+            loggedIn = true;
             reserveRequest();
         }
         else if(responseCode == -1){
@@ -482,9 +483,23 @@ public class Main extends Activity implements LocationListener {
             case R.id.activity_log:
                 eventLog(item);
                 break;
+            case R.id.logout:
+                loggedIn = false;
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public boolean onPrepareOptionsMenu(Menu menu){
+        MenuItem log = menu.findItem(R.id.logout);
+
+        if(loggedIn){
+            log.setVisible(true);
+        } else {
+            log.setVisible(false);
+        }
+        return true;
     }
 }
