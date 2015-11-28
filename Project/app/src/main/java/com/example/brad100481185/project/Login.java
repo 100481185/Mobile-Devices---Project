@@ -53,8 +53,8 @@ public class Login extends Activity {
         else if(verify(n, p)){
             name.setText("");
             pass.setText("");
-            name.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
-            pass.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+            name.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP);
+            pass.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP);
 
             Intent log = new Intent(Intent.ACTION_PICK);
             Bundle user = new Bundle();

@@ -36,6 +36,8 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
         android:id="@+id/editText3"
         android:layout_alignTop="@+id/pswd"
         android:layout_alignStart="@+id/editText2"
@@ -49,4 +51,5 @@
         android:id="@+id/signin"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

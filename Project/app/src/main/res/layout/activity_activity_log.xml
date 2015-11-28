@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/event_name"
+        android:text="Select Chosen Event"
         android:id="@+id/event_name"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
@@ -21,8 +21,9 @@
         android:text="@string/review_button"
         android:id="@+id/review"
         android:onClick="review"
-        android:layout_below="@+id/event_name"
-        android:layout_alignEnd="@+id/event_name" />
+        android:layout_marginBottom="62dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/reservation_code" />
 
     <Button
         android:layout_width="wrap_content"
@@ -30,7 +31,7 @@
         android:text="@string/check_code_button"
         android:onClick="reservationCode"
         android:id="@+id/reservation_code"
-        android:layout_alignBottom="@+id/review"
+        android:layout_alignTop="@+id/review"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -39,44 +40,15 @@
         android:text="@string/cancel"
         android:onClick="cancelReservation"
         android:id="@+id/cancel_reservation"
-        android:layout_alignBottom="@+id/reservation_code"
+        android:layout_alignTop="@+id/reservation_code"
         android:layout_toEndOf="@+id/reservation_code" />
 
-    <TextView
+    <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/event_name"
-        android:id="@+id/textView"
-        android:layout_below="@+id/review"
-        android:layout_alignEnd="@+id/review"
-        android:layout_marginTop="49dp" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/review_button"
-        android:onClick="review"
-        android:id="@+id/button"
-        android:layout_below="@+id/textView"
-        android:layout_alignEnd="@+id/textView" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/check_code_button"
-        android:onClick="reservationCode"
-        android:id="@+id/button2"
-        android:layout_alignBottom="@+id/button"
-        android:layout_alignStart="@+id/reservation_code" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/cancel"
-        android:onClick="cancelReservation"
-        android:id="@+id/button3"
-        android:layout_alignBottom="@+id/button2"
-        android:layout_alignStart="@+id/cancel_reservation" />
+        android:id="@+id/spinner"
+        android:layout_marginTop="26dp"
+        android:layout_below="@+id/event_name"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

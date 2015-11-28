@@ -293,14 +293,22 @@ public class Main extends Activity implements LocationListener {
 
     //todo: proceed to event log activity
     public void eventLog(MenuItem item){
-        Intent logIntent = new Intent(Main.this, ActivityLog.class);
-        startActivity(logIntent);
+        if(loggedIn){
+            Intent logIntent = new Intent(Main.this, ActivityLog.class);
+            startActivity(logIntent);
+        } else {
+            Toast.makeText(getApplicationContext(), "You need to log in first.", Toast.LENGTH_LONG).show();
+        }
     }
 
     //todo: proceed to preferences activity
     public void preferences(MenuItem item){
-        Intent preferenceIntent = new Intent(Main.this, Preferences.class);
-        startActivity(preferenceIntent);
+        if(loggedIn){
+            Intent preferenceIntent = new Intent(Main.this, Preferences.class);
+            startActivity(preferenceIntent);
+        } else {
+            Toast.makeText(getApplicationContext(), "You need to log in first.", Toast.LENGTH_LONG).show();
+        }
     }
 
     //proceed to reservation activity
@@ -416,18 +424,20 @@ public class Main extends Activity implements LocationListener {
                 conn.setDoInput(true);
                 conn.setChunkedStreamingMode(0);
 
-                //read JSON file from inputStream
-                InputStream in = new BufferedInputStream(conn.getInputStream());
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while((line = reader.readLine()) != null){
-                    sb.append(line+"\n");
-                }
-                in.close();
-                resp = sb.toString();
+                if(conn.getResponseCode() == HttpURLConnection.HTTP_OK){
+                    //read JSON file from inputStream
+                    InputStream in = new BufferedInputStream(conn.getInputStream());
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while((line = reader.readLine()) != null){
+                        sb.append(line+"\n");
+                    }
+                    in.close();
+                    resp = sb.toString();
 
-                response = new JSONObject(resp);
+                    response = new JSONObject(resp);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 exception = e;
@@ -442,13 +452,18 @@ public class Main extends Activity implements LocationListener {
                 return;
             }
             try{
-                if(response.getString("status").equalsIgnoreCase("ok")){
-                    obj.remove("quantity");
-                    obj.put("quantity", quantity);
-                    arr.put(objIndex, obj);
-                    Toast.makeText(getApplicationContext(), "Reservation success", Toast.LENGTH_LONG).show();
+                if(response != null){
+                    if(response.getString("status").equalsIgnoreCase("ok")){
+                        obj.remove("quantity");
+                        obj.put("quantity", quantity);
+                        arr.put(objIndex, obj);
+                        Toast.makeText(getApplicationContext(), "Reservation success", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Reservation failed", Toast.LENGTH_LONG).show();
+                    }
                 } else {
-                    Toast.makeText(getApplicationContext(), "Reservation failed", Toast.LENGTH_LONG).show();
+                    //Unable to connect
+                    Toast.makeText(getApplicationContext(), "An error occurred while trying to complete your reservation.  \nPlease try again later.", Toast.LENGTH_LONG).show();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
