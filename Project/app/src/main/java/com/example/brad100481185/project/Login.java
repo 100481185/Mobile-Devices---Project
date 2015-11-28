@@ -74,23 +74,22 @@ public class Login extends Activity {
     private boolean verify(String name, String password){
         try{
             VerifyLogin v = new VerifyLogin();
-            v.execute(urlMAIN, name, password);
-            return v.accept;
+            Boolean b = v.execute(urlMAIN, name, password).get();
+            return b;
         } catch (Exception e){
             e.printStackTrace();
             return false;
         }
     }
 
-    class VerifyLogin extends AsyncTask<String, Void, String>{
+    class VerifyLogin extends AsyncTask<String, Void, Boolean>{
         private Exception exception = null;
-        private boolean accept;
 
         private JSONObject user = new JSONObject();
         private JSONObject hold = new JSONObject();
         private JSONObject j = null;
 
-        protected String doInBackground(String... params){
+        protected Boolean doInBackground(String... params){
             try{
                 URL url = new URL(params[0]);
                 HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -122,33 +121,31 @@ public class Login extends Activity {
                     in.close();
 
                     j = new JSONObject(sb.toString());
+                    return true;
                 }
             } catch(Exception e){
                 e.printStackTrace();
             }
-            return "";
+            return false;
         }
 
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(Boolean result) {
             if (exception != null) {
                 exception.printStackTrace();
                 return;
             }
-            super.onPostExecute(result);
 
             try{
                 if(j != null){
-                    Log.i("J", j.toString());
                     SharedPreferences.Editor editor = share.edit();
 
                     editor.putString("AuthToken", j.getString("auth_token"));
                     editor.commit();
-
-                    this.accept = true;
-                } else this.accept = false;
+                }
             } catch(Exception e){
                 e.printStackTrace();
             }
+            super.onPostExecute(result);
         }
     }
 
