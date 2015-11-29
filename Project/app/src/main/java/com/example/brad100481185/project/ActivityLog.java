@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 public class ActivityLog extends Activity {
 
+    String urlRES = "http://localize-seprojects.rhcloud.com/reservations.json";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

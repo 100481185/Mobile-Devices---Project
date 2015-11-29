@@ -58,8 +58,9 @@ public class Login extends Activity {
 
             Intent log = new Intent(Intent.ACTION_PICK);
             Bundle user = new Bundle();
-            user.putString("name", n);
-            user.putString("password", p);
+
+            user.putString("user_email", n);
+            user.putString("user_token", share.getString("AuthToken", "NA"));
             log.putExtras(user);
 
             setResult(2, log);
@@ -88,6 +89,7 @@ public class Login extends Activity {
         private JSONObject user = new JSONObject();
         private JSONObject hold = new JSONObject();
         private JSONObject j = null;
+        private String token;
 
         protected Boolean doInBackground(String... params){
             try{
@@ -141,6 +143,7 @@ public class Login extends Activity {
 
                     editor.putString("AuthToken", j.getString("auth_token"));
                     editor.commit();
+
                 }
             } catch(Exception e){
                 e.printStackTrace();

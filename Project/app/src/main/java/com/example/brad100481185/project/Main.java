@@ -1,8 +1,6 @@
 package com.example.brad100481185.project;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.ComponentName;
@@ -17,7 +15,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -35,9 +32,11 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
@@ -46,14 +45,18 @@ import java.util.Locale;
 public class Main extends Activity implements LocationListener {
 
     public String urlBASE = "http://localize-seprojects.rhcloud.com/promotions.json";
+    public String urlRES = "http://localize-seprojects.rhcloud.com/reservations.json";
     public String urlMAIN = "http://localize-seprojects.rhcloud.com";
     public JSONArray arr;
     public JSONObject obj;
+    public JSONObject user = new JSONObject();
+
     public int objIndex;
     private boolean loggedIn = false;
 
     private double latitude, longitude;
     private String newQuantity;
+    private String email, token, id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -297,6 +300,8 @@ public class Main extends Activity implements LocationListener {
     public void eventLog(MenuItem item){
         if(loggedIn){
             Intent logIntent = new Intent(Main.this, ActivityLog.class);
+            Bundle e = new Bundle();
+            e.putString("data", arr.toString());
             startActivity(logIntent);
         } else {
             Toast.makeText(getApplicationContext(), "You need to log in first.", Toast.LENGTH_LONG).show();
@@ -381,6 +386,7 @@ public class Main extends Activity implements LocationListener {
             //update quantity of event
             try{
                 newQuantity = resultIntent.getStringExtra("quantity");
+                id = obj.getString("id");
                 if(!loggedIn){
                     startActivityForResult(new Intent(this, Login.class), 2);
                 } else {
@@ -391,6 +397,10 @@ public class Main extends Activity implements LocationListener {
             }
         } else if(responseCode == 2) {
             loggedIn = true;
+            Bundle logged = resultIntent.getExtras();
+
+            email = logged.getString("user_email");
+            token = logged.getString("user_token");
             reserveRequest();
         }
         else if(responseCode == -1){
@@ -401,10 +411,13 @@ public class Main extends Activity implements LocationListener {
 
     private void reserveRequest(){
         try{
-            String urlResponse = urlMAIN + "/promotions/" + obj.getString("id") + "/reserve.json";
-
             ChangeQuantityTask change = new ChangeQuantityTask();
-            change.execute(urlResponse, newQuantity);
+
+            user.put("promotion_id", obj.getString("id"));
+            user.put("customer_email", email);
+            user.put("customer_token", token);
+
+            change.execute(urlRES, newQuantity, user.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -414,6 +427,7 @@ public class Main extends Activity implements LocationListener {
         private Exception exception = null;
         private String resp = null;
         private String quantity = null;
+        private String error = null;
         private JSONObject response = null;
 
         protected String doInBackground(String... params){
@@ -423,8 +437,17 @@ public class Main extends Activity implements LocationListener {
                 //get JSON from url
                 URL url = new URL(params[0]);
                 HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setRequestProperty("Accept", "application/json");
+                conn.setDoOutput(true);
                 conn.setDoInput(true);
                 conn.setChunkedStreamingMode(0);
+
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+                writer.write(params[2]);
+                writer.flush();
+                writer.close();
 
                 if(conn.getResponseCode() == HttpURLConnection.HTTP_OK){
                     //read JSON file from inputStream
@@ -439,6 +462,8 @@ public class Main extends Activity implements LocationListener {
                     resp = sb.toString();
 
                     response = new JSONObject(resp);
+                } else {
+                    error = "Error Code "+conn.getResponseCode()+"\n "+conn.getResponseMessage();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -465,7 +490,7 @@ public class Main extends Activity implements LocationListener {
                     }
                 } else {
                     //Unable to connect
-                    Toast.makeText(getApplicationContext(), "An error occurred while trying to complete your reservation.  \nPlease try again later.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), error, Toast.LENGTH_LONG).show();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
