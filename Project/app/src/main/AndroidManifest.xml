@@ -28,48 +28,42 @@
         </activity>
         <activity
             android:name=".Reserve"
-            android:label="@string/title_activity_reserve"
-            android:parentActivityName=".Main" >
+            android:label="@string/title_activity_reserve">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.brad100481185.project.Main" />
         </activity>
         <activity
             android:name=".Preferences"
-            android:label="@string/title_activity_preferences"
-            android:parentActivityName=".Main" >
+            android:label="@string/title_activity_preferences">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.brad100481185.project.Main" />
         </activity>
         <activity
             android:name=".ActivityLog"
-            android:label="@string/title_activity_activity_log"
-            android:parentActivityName=".Main" >
+            android:label="@string/title_activity_activity_log" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.brad100481185.project.Main" />
         </activity>
         <activity
             android:name=".Review"
-            android:label="@string/title_activity_review"
-            android:parentActivityName=".ActivityLog" >
+            android:label="@string/title_activity_review">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.brad100481185.project.ActivityLog" />
         </activity>
         <activity
             android:name=".ReservationCode"
-            android:label="@string/title_activity_reservation_code"
-            android:parentActivityName=".ActivityLog" >
+            android:label="@string/title_activity_reservation_code">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.brad100481185.project.ActivityLog" />
         </activity>
         <activity
             android:name=".EventSearch"
-            android:label="@string/title_activity_event_search"
-            android:parentActivityName=".Main" >
+            android:label="@string/title_activity_event_search">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
 
@@ -81,25 +75,15 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".ReviewList"
-            android:label="@string/title_activity_review_list"
-            android:parentActivityName=".Review" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.brad100481185.project.Review" />
-        </activity>
-        <activity
             android:name=".WriteReview"
-            android:label="@string/title_activity_write_review"
-            android:parentActivityName=".Review" >
+            android:label="@string/title_activity_write_review">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.brad100481185.project.Review" />
         </activity>
         <activity
             android:name=".Login"
-            android:label="@string/title_activity_login"
-            android:parentActivityName=".Main" >
+            android:label="@string/title_activity_login">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.brad100481185.project.Main" />

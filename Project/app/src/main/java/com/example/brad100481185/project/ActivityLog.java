@@ -158,6 +158,21 @@ public class ActivityLog extends Activity {
 
     //todo: cancel reservation of event
     public void cancelReservation(View view){
-        //do something
+        CancelReservation cancelled = new CancelReservation();
+        cancelled.execute(urlRES);
+    }
+
+    class CancelReservation extends AsyncTask<String, Void, String>{
+        private Exception exception = null;
+
+        protected String doInBackground(String... params){
+            return "";
+        }
+        protected void onPostExecute(String result){
+            if (exception != null) {
+                exception.printStackTrace();
+                return;
+            }
+        }
     }
 }
