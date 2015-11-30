@@ -20,11 +20,4 @@ public class Review extends Activity {
         Intent writeIntent = new Intent(Review.this, WriteReview.class);
         startActivity(writeIntent);
     }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        finish();
-        return super.onKeyDown(keyCode, event);
-    }
 }

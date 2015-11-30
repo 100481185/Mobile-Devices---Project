@@ -17,13 +17,11 @@ public class ReservationCode extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reservation_code);
 
+        //print event name and key
         TextView name = (TextView)findViewById(R.id.name_code);
         TextView code = (TextView)findViewById(R.id.code);
 
         name.setText(getIntent().getExtras().getString("name"));
         code.setText(getIntent().getExtras().getString("key"));
     }
-
-    //todo: add functionality
-
 }

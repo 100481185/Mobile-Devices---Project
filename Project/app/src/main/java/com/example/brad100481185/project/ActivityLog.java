@@ -39,6 +39,7 @@ public class ActivityLog extends Activity {
     private int delIndex;
 
     @Override
+    //prepare event log page
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activity_log);
@@ -55,6 +56,7 @@ public class ActivityLog extends Activity {
         }
     }
 
+    //obtain current reservations from reservations.json
     class GetReservations extends AsyncTask<String, Void, String> {
         private Exception exception = null;
 
@@ -91,6 +93,7 @@ public class ActivityLog extends Activity {
                 return;
             }
 
+            //set up array lists for event names and keys
             events = new ArrayList<String>();
             eventAuth = new ArrayList<String>();
             for(int el = 0; el < arr.length(); el++){
@@ -107,6 +110,7 @@ public class ActivityLog extends Activity {
                 }
             }
 
+            //prepare spinner
             Spinner eventSpin = (Spinner)findViewById(R.id.spinner);
             adapt = new ArrayAdapter<String>(ActivityLog.this, android.R.layout.simple_spinner_dropdown_item, events);
             eventSpin.setAdapter(adapt);
@@ -129,7 +133,8 @@ public class ActivityLog extends Activity {
         }
     }
 
-    //todo: proceed to review activity
+    //proceed to review activity
+    //todo: obtain reviews for activity
     public void review(View view){
         TextView chosen = (TextView)findViewById(R.id.eventName);
         String name = chosen.getText().toString();
@@ -141,6 +146,7 @@ public class ActivityLog extends Activity {
         startActivity(reviewIntent);
     }
 
+    //proceed to reservation code activity
     public void reservationCode(View view){
         TextView chosen = (TextView)findViewById(R.id.eventName);
         String name = chosen.getText().toString();
@@ -154,6 +160,7 @@ public class ActivityLog extends Activity {
         startActivity(codeIntent);
     }
 
+    //obtain key for event
     private String getKey(String name){
         for(int ev = 0; ev < rsrv.length(); ev++){
             try{
@@ -168,6 +175,7 @@ public class ActivityLog extends Activity {
         return "";
     }
 
+    //cancel a reservation
     public void cancelReservation(View view){
         TextView chosen = (TextView)findViewById(R.id.eventName);
         String name = chosen.getText().toString();
@@ -180,6 +188,7 @@ public class ActivityLog extends Activity {
     //todo: make cancellation functional
     class CancelReservation extends AsyncTask<String, Void, String>{
         private Exception exception = null;
+        private String error = null;
 
         protected String doInBackground(String... params){
             try {
@@ -188,8 +197,13 @@ public class ActivityLog extends Activity {
                 conn.setRequestMethod("DELETE");
                 conn.setChunkedStreamingMode(0);
 
+                //connection accepted
                 if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
 
+                }
+                // connection not accepted
+                else {
+                    error = "Error Code "+conn.getResponseCode()+"\n "+conn.getResponseMessage();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -204,21 +218,27 @@ public class ActivityLog extends Activity {
                 return;
             }
 
-            events.remove(delIndex);
-            eventAuth.remove(delIndex);
+            if(error.equals(null)){
+                //update array lists and spinner
+                events.remove(delIndex);
+                eventAuth.remove(delIndex);
 
-            Toast.makeText(getApplicationContext(), "Delete successful!", Toast.LENGTH_LONG).show();
-            adapt.notifyDataSetChanged();
+                Toast.makeText(getApplicationContext(), "Delete successful!", Toast.LENGTH_LONG).show();
+                adapt.notifyDataSetChanged();
 
-            TextView chosen = (TextView)findViewById(R.id.eventName);
-            if(delIndex == events.size()){
-                if(events.isEmpty()){
-                    chosen.setText("");
+                TextView chosen = (TextView)findViewById(R.id.eventName);
+                if(delIndex == events.size()){
+                    if(events.isEmpty()){
+                        chosen.setText("");
+                    } else {
+                        chosen.setText(events.get(delIndex-1));
+                    }
                 } else {
-                    chosen.setText(events.get(delIndex-1));
+                    chosen.setText(events.get(delIndex));
                 }
             } else {
-                chosen.setText(events.get(delIndex));
+                //Unable to connect
+                Toast.makeText(getApplicationContext(), error, Toast.LENGTH_LONG).show();
             }
 
         }

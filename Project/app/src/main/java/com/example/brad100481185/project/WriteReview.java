@@ -16,6 +16,7 @@ public class WriteReview extends Activity {
         setContentView(R.layout.activity_write_review);
     }
 
+    //saves review dialogs and empties them afterwards
     public void saveReview(View view){
         //todo: save review
         EditText rev = (EditText)findViewById(R.id.editText);
@@ -28,6 +29,7 @@ public class WriteReview extends Activity {
         finish();
     }
 
+    //empties review dialogs and disregards input
     public void cancelReview(View view){
         EditText rev = (EditText)findViewById(R.id.editText);
         rev.setText("");

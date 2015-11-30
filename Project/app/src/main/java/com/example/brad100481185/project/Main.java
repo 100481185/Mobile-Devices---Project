@@ -52,7 +52,7 @@ public class Main extends Activity implements LocationListener {
     public JSONObject user = new JSONObject();
 
     public int objIndex;
-    private boolean loggedIn = false;
+    public static boolean loggedIn = false;
 
     private double latitude, longitude;
     private String newQuantity;
@@ -63,10 +63,12 @@ public class Main extends Activity implements LocationListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // obtain current location
         requestLocationPermissions();
         obtainLocation();
     }
 
+    // request permission for fine location
     final int PERMISSIONS_REQUEST_ACCESS_LOCATION = 410020;
     private void requestLocationPermissions() {
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -96,6 +98,7 @@ public class Main extends Activity implements LocationListener {
         }
     }
 
+    // obtain current location
     private void obtainLocation(){
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             LocationManager locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
@@ -125,8 +128,8 @@ public class Main extends Activity implements LocationListener {
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
 
-                            DownloadOriginTask downloadOriginTask = new DownloadOriginTask();
-                            downloadOriginTask.execute(urlBASE);
+                            ObtainEvents obtain = new ObtainEvents();
+                            obtain.execute(urlBASE);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -152,9 +155,11 @@ public class Main extends Activity implements LocationListener {
         obtainLocation();
     }
 
-    class DownloadOriginTask extends AsyncTask<String, Void, String> {
+    // obtain the events from promotions.json
+    class ObtainEvents extends AsyncTask<String, Void, String> {
         private Exception exception = null;
         private String str = null;
+        private String error = null;
 
         @Override
         protected String doInBackground(String... params) {
@@ -165,22 +170,28 @@ public class Main extends Activity implements LocationListener {
                 conn.setDoInput(true);
                 conn.setChunkedStreamingMode(0);
 
-                //read JSON file from inputStream
-                InputStream in = new BufferedInputStream(conn.getInputStream());
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while((line = reader.readLine()) != null){
-                    sb.append(line+"\n");
+                if(conn.getResponseCode() == HttpURLConnection.HTTP_OK){
+                    //read JSON file from inputStream
+                    InputStream in = new BufferedInputStream(conn.getInputStream());
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while((line = reader.readLine()) != null){
+                        sb.append(line+"\n");
+                    }
+                    in.close();
+                    str = sb.toString();
+
+                    //todo: sort by how close an event is to location
+                    //(involves private doubles latitude and longitude
+
+                    //parse string to JSON array
+                    arr = new JSONArray(str);
                 }
-                in.close();
-                str = sb.toString();
-
-                //todo: sort by how close an event is to location
-                //(involves private doubles latitude and longitude
-
-                //parse string to JSON array
-                arr = new JSONArray(str);
+                // connection not accepted
+                else {
+                    error = "Error Code "+conn.getResponseCode()+"\n "+conn.getResponseMessage();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 exception = e;
@@ -196,10 +207,16 @@ public class Main extends Activity implements LocationListener {
                 return;
             }
 
-            imgButton();
+            if(error == null){
+                imgButton();
+            } else {
+                //Unable to connect
+                Toast.makeText(getApplicationContext(), error, Toast.LENGTH_LONG).show();
+            }
         }
     }
 
+    // get image from image url provided by promotions.json
     private Drawable getImage(String urlIMG){
         try{
             GetImageTask banner = new GetImageTask();
@@ -210,6 +227,7 @@ public class Main extends Activity implements LocationListener {
         }
     }
 
+    // draw the image
     class GetImageTask extends AsyncTask<String, Void, Drawable>{
         private Drawable img = null;
 
@@ -229,7 +247,11 @@ public class Main extends Activity implements LocationListener {
         for(int a = 0; a < arr.length(); a++){
             try{
                 String urlIMG = urlMAIN + arr.getJSONObject(a).getString("banner");
-                Drawable i = getImage(urlIMG);if(a == 0){
+                Drawable i = getImage(urlIMG);
+
+                // append image to an imageButton
+                // this is the most efficient way despite looking cluttered
+                if(a == 0){
                     TextView cap = (TextView)findViewById(R.id.caption);
                     cap.setText(arr.getJSONObject(a).getString("title") + "\nPrice: $" + arr.getJSONObject(a).getString("price"));
 
@@ -296,7 +318,7 @@ public class Main extends Activity implements LocationListener {
         }
     }
 
-    //proceed to event log activity
+    // proceed to event log activity
     public void eventLog(MenuItem item){
         if(loggedIn){
             Intent logIntent = new Intent(Main.this, ActivityLog.class);
@@ -327,6 +349,7 @@ public class Main extends Activity implements LocationListener {
         }
     }
 
+    // proceed to login activity from the main activity
     public void login(MenuItem item){
         startActivityForResult(new Intent(this, Login.class), 1);
     }
@@ -336,6 +359,7 @@ public class Main extends Activity implements LocationListener {
         Intent eventIntent = new Intent(Main.this, Reserve.class);
         Bundle event = new Bundle();
         try{
+            //determine object based on which button is pressed
             switch(view.getId()){
                 case R.id.imageButton:
                     obj = arr.getJSONObject(0);
@@ -395,33 +419,44 @@ public class Main extends Activity implements LocationListener {
     public void onActivityResult(int requestCode, int responseCode, Intent resultIntent) {
         super.onActivityResult(requestCode, responseCode, resultIntent);
 
+        //successful reservation
         if(responseCode == 1){
             //update quantity of event
             try{
                 newQuantity = resultIntent.getStringExtra("quantity");
                 id = obj.getString("id");
-                if(!loggedIn){
+
+                if(!loggedIn){ //not logged in yet
                     startActivityForResult(new Intent(this, Login.class), 2);
-                } else {
+                } else { //already logged in
                     reserveRequest();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if(responseCode == 2) {
+        }
+        //return from login
+        else if(responseCode == 2) {
             loggedIn = true;
             Bundle logged = resultIntent.getExtras();
 
             email = logged.getString("user_email");
             token = logged.getString("user_token");
+
             if(requestCode == 2) reserveRequest();
+            else if(requestCode == 4) Toast.makeText(getApplicationContext(), "This event is full.", Toast.LENGTH_LONG).show();
         }
+        //the event is full
         else if(responseCode == -1){
-            //This event is full.
-            Toast.makeText(getApplicationContext(), "This event is full.", Toast.LENGTH_LONG).show();
+            if(!loggedIn){ //not logged in yet
+                startActivityForResult(new Intent(this, Login.class), 4);
+            } else { //already logged in
+                Toast.makeText(getApplicationContext(), "This event is full.", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
+    // process request to server to confirm reservation
     private void reserveRequest(){
         try{
             ChangeQuantityTask change = new ChangeQuantityTask();
@@ -436,6 +471,7 @@ public class Main extends Activity implements LocationListener {
         }
     }
 
+    // changes quantity remaining for event
     class ChangeQuantityTask extends AsyncTask<String, Void, String>{
         private Exception exception = null;
         private String resp = null;
@@ -457,11 +493,13 @@ public class Main extends Activity implements LocationListener {
                 conn.setDoInput(true);
                 conn.setChunkedStreamingMode(0);
 
+                // write account information to connection
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
                 writer.write(params[2]);
                 writer.flush();
                 writer.close();
 
+                // code 200 - ok
                 if(conn.getResponseCode() == HttpURLConnection.HTTP_OK){
                     //read JSON file from inputStream
                     InputStream in = new BufferedInputStream(conn.getInputStream());
@@ -475,7 +513,9 @@ public class Main extends Activity implements LocationListener {
                     resp = sb.toString();
 
                     response = new JSONObject(resp);
-                } else {
+                }
+                // connection not accepted
+                else {
                     error = "Error Code "+conn.getResponseCode()+"\n "+conn.getResponseMessage();
                 }
             } catch (Exception e) {
@@ -492,19 +532,21 @@ public class Main extends Activity implements LocationListener {
                 return;
             }
             try{
+                // quantity is changed if the connection does not fail
                 if(response != null){
+                    // quantity change is allowed
                     if(response.getString("status").equalsIgnoreCase("ok")){
                         obj.remove("quantity");
                         obj.put("quantity", quantity);
                         arr.put(objIndex, obj);
                         Toast.makeText(getApplicationContext(), response.getString("message").replace("[", "").replace("]", "").replace("\"", ""), Toast.LENGTH_LONG).show();
-                    } else {
+                    }
+                    // quantity changed is not allowed
+                    else {
                         if(response.getString("errors").contains("valid_to")){
                             Toast.makeText(getApplicationContext(), response.getJSONObject("errors").getString("valid_to").replace("[", "").replace("]", "").replace("\"", ""), Toast.LENGTH_LONG).show();
                         } else if(response.getString("errors").contains("reservation")){
                             Toast.makeText(getApplicationContext(), response.getJSONObject("errors").getString("reservation").replace("[", "").replace("]", "").replace("\"", ""), Toast.LENGTH_LONG).show();
-                        } else if(response.getString("errors").contains("quantity")){
-                            Toast.makeText(getApplicationContext(), response.getJSONObject("errors").getString("quantity").replace("[", "").replace("]", "").replace("\"", ""), Toast.LENGTH_LONG).show();
                         }
                     }
                 } else {
@@ -556,6 +598,7 @@ public class Main extends Activity implements LocationListener {
         return super.onOptionsItemSelected(item);
     }
 
+    // prepare options menu; item availability depends on whether the user is logged in
     public boolean onPrepareOptionsMenu(Menu menu){
         MenuItem logOut = menu.findItem(R.id.logout);
         MenuItem logIn = menu.findItem(R.id.login);

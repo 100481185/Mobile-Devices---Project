@@ -18,6 +18,7 @@ public class Reserve extends Activity {
     int quantity;
 
     @Override
+    // set up reservations page
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserve);
@@ -25,12 +26,14 @@ public class Reserve extends Activity {
 
         Bundle info = event.getExtras();
 
+        //set quantity of event
         String quantityString = "Unlimited";
         if (!info.getString("quantity").equals("-1") && !info.getString("quantity").equals(String.valueOf(Integer.MAX_VALUE))){
             quantity = Integer.parseInt(info.getString("quantity"));
             quantityString = info.getString("quantity");
         } else quantity = MAX;
 
+        //determine if event has an expiration date
         String hasEnd = "";
         if(!info.getString("end").equals("null"))
             hasEnd = " to " + info.getString("end");
@@ -45,6 +48,7 @@ public class Reserve extends Activity {
         banner.execute(info.getString("img"));
     }
 
+    //obtains banner from image url
     class GetBanner extends AsyncTask<String, Void, Drawable> {
         private Drawable banner;
 
@@ -66,15 +70,19 @@ public class Reserve extends Activity {
 
     public void reserve(View view){
         Intent confirmReserve = new Intent(Intent.ACTION_PICK);
+
+        //event is vacant
         if(quantity > 0){
             if(quantity != MAX) quantity--;
             Bundle newQuantity = new Bundle();
             newQuantity.putString("quantity", String.valueOf(quantity));
             confirmReserve.putExtras(newQuantity);
             setResult(1, confirmReserve);
-        } else {
+        }
+        //event is full
+        else {
             setResult(-1, confirmReserve);
         }
-        finish(); //placed here for now
+        finish();
     }
 }

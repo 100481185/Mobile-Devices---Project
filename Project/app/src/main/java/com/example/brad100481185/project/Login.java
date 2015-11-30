@@ -38,6 +38,7 @@ public class Login extends Activity {
         share = getSharedPreferences("CurrentUser", MODE_PRIVATE);
     }
 
+    //execute login
     public void login(View view){
         EditText name = (EditText)findViewById(R.id.editText2);
         EditText pass = (EditText)findViewById(R.id.editText3);
@@ -45,16 +46,18 @@ public class Login extends Activity {
         String n = name.getText().toString();
         String p = pass.getText().toString();
 
+        //fields are empty
         if(n.length() == 0 || p.length() == 0){
             Toast.makeText(getApplicationContext(), "Please complete the required fields.", Toast.LENGTH_LONG).show();
             name.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
             pass.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
         }
+        //access granted
         else if(verify(n, p)){
             name.setText("");
             pass.setText("");
-            name.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP);
-            pass.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP);
+            name.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
+            pass.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
 
             Intent log = new Intent(Intent.ACTION_PICK);
             Bundle user = new Bundle();
@@ -65,13 +68,16 @@ public class Login extends Activity {
 
             setResult(2, log);
             finish();
-        } else {
+        }
+        //access denied
+        else {
             Toast.makeText(getApplicationContext(), "The login information is incorrect.  Please try again.", Toast.LENGTH_LONG).show();
             name.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
             pass.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
         }
     }
 
+    //check is username and password are valid
     private boolean verify(String name, String password){
         try{
             VerifyLogin v = new VerifyLogin();
@@ -83,13 +89,14 @@ public class Login extends Activity {
         }
     }
 
+    //verifies login information
     class VerifyLogin extends AsyncTask<String, Void, Boolean>{
         private Exception exception = null;
+        private String error = null;
 
         private JSONObject user = new JSONObject();
         private JSONObject hold = new JSONObject();
         private JSONObject j = null;
-        private String token;
 
         protected Boolean doInBackground(String... params){
             try{
@@ -102,6 +109,7 @@ public class Login extends Activity {
                 conn.setDoInput(true);
                 conn.setChunkedStreamingMode(0);
 
+                //fill in JSONObject with user data to be sent
                 user.put("email", params[1]);
                 user.put("password", params[2]);
                 hold.put("customer", user);
@@ -111,6 +119,7 @@ public class Login extends Activity {
                 writer.flush();
                 writer.close();
 
+                //connection accepted
                 if(conn.getResponseCode() == HttpURLConnection.HTTP_OK){
                     //read JSON file from inputStream
                     InputStream in = new BufferedInputStream(conn.getInputStream());
@@ -125,6 +134,10 @@ public class Login extends Activity {
                     j = new JSONObject(sb.toString());
                     return true;
                 }
+                // connection not accepted
+                else {
+                    error = "Error Code "+conn.getResponseCode()+"\n "+conn.getResponseMessage();
+                }
             } catch(Exception e){
                 e.printStackTrace();
             }
@@ -138,12 +151,16 @@ public class Login extends Activity {
             }
 
             try{
+                //add authorization token to shared preferences
                 if(j != null){
                     SharedPreferences.Editor editor = share.edit();
 
                     editor.putString("AuthToken", j.getString("auth_token"));
                     editor.commit();
 
+                } else {
+                    //Unable to connect
+                    Toast.makeText(getApplicationContext(), error, Toast.LENGTH_LONG).show();
                 }
             } catch(Exception e){
                 e.printStackTrace();
