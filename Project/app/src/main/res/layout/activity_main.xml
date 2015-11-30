@@ -25,10 +25,11 @@
 
             <FrameLayout android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
                 android:layout_columnWeight="2"
                 android:layout_column="0"
-                android:layout_row="0">
+                android:layout_row="0"
+                android:background="#00ff00">
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -43,16 +44,17 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/caption"
-                    android:layout_gravity="center_horizontal|bottom|left"
+                    android:layout_gravity="center_horizontal|top|left"
                     android:layout_marginTop="50dp" />
             </FrameLayout>
 
             <FrameLayout android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
                 android:layout_columnWeight="2"
                 android:layout_column="1"
-                android:layout_row="0">
+                android:layout_row="0"
+                android:background="#00ff00">
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -66,16 +68,17 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/caption2"
-                    android:layout_gravity="center_horizontal|bottom|left"
+                    android:layout_gravity="center_horizontal|top|left"
                     android:layout_marginTop="80dp"   />
             </FrameLayout>
 
             <FrameLayout android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
                 android:layout_columnWeight="2"
                 android:layout_column="0"
-                android:layout_row="1">
+                android:layout_row="1"
+                android:background="#00ff00">
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -89,16 +92,17 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/caption3"
-                    android:layout_gravity="center_horizontal|bottom|left"
+                    android:layout_gravity="center_horizontal|top|left"
                     android:layout_marginTop="55dp"   />
             </FrameLayout>
 
             <FrameLayout android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
                 android:layout_columnWeight="2"
                 android:layout_column="1"
-                android:layout_row="1">
+                android:layout_row="1"
+                android:background="#00ff00">
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -112,16 +116,17 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/caption4"
-                    android:layout_gravity="center_horizontal|bottom|left"
+                    android:layout_gravity="center_horizontal|top|left"
                     android:layout_marginTop="50dp"   />
             </FrameLayout>
 
             <FrameLayout android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
                 android:layout_columnWeight="2"
                 android:layout_column="0"
-                android:layout_row="2">
+                android:layout_row="2"
+                android:background="#00ff00">
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -135,16 +140,17 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/caption5"
-                    android:layout_gravity="center_horizontal|bottom|left"
+                    android:layout_gravity="center_horizontal|top|left"
                     android:layout_marginTop="50dp"   />
             </FrameLayout>
 
             <FrameLayout android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
                 android:layout_columnWeight="2"
                 android:layout_column="1"
-                android:layout_row="2">
+                android:layout_row="2"
+                android:background="#00ff00">
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -158,16 +164,17 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/caption6"
-                    android:layout_gravity="center_horizontal|bottom|left"
+                    android:layout_gravity="center_horizontal|top|left"
                     android:layout_marginTop="50dp"   />
             </FrameLayout>
 
             <FrameLayout android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
                 android:layout_columnWeight="2"
                 android:layout_column="0"
-                android:layout_row="3">
+                android:layout_row="3"
+                android:background="#00ff00">
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -181,16 +188,17 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/caption7"
-                    android:layout_gravity="center_horizontal|bottom|left"
+                    android:layout_gravity="center_horizontal|top|left"
                     android:layout_marginTop="50dp"   />
             </FrameLayout>
 
             <FrameLayout android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
                 android:layout_columnWeight="2"
                 android:layout_column="1"
-                android:layout_row="3">
+                android:layout_row="3"
+                android:background="#00ff00">
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -204,16 +212,17 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/caption8"
-                    android:layout_gravity="center_horizontal|bottom|left"
-                    android:layout_marginTop="80dp"   />
+                    android:layout_gravity="center_horizontal|top|left"
+                    android:layout_marginTop="100dp"   />
             </FrameLayout>
 
             <FrameLayout android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
                 android:layout_columnWeight="2"
                 android:layout_column="0"
-                android:layout_row="4">
+                android:layout_row="4"
+                android:background="#00ff00">
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -227,15 +236,16 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/caption9"
-                    android:layout_gravity="center_horizontal|bottom|left"
+                    android:layout_gravity="center_horizontal|top|left"
                     android:layout_marginTop="50dp"  />
             </FrameLayout>
 
             <FrameLayout
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
                 android:layout_columnWeight="2"
                 android:layout_column="1"
-                android:layout_row="4">
+                android:layout_row="4"
+                android:background="#00ff00">
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -249,8 +259,8 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/caption10"
-                    android:layout_gravity="center_horizontal|bottom|left"
-                    android:layout_marginTop="100dp"  />
+                    android:layout_gravity="center_horizontal|left|top"
+                    android:layout_marginTop="80dp"  />
             </FrameLayout>
 
         </GridLayout>

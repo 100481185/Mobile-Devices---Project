@@ -327,6 +327,10 @@ public class Main extends Activity implements LocationListener {
         }
     }
 
+    public void login(MenuItem item){
+        startActivityForResult(new Intent(this, Login.class), 1);
+    }
+
     //proceed to reservation activity
     public void eventSelected(View view) {
         Intent eventIntent = new Intent(Main.this, Reserve.class);
@@ -410,7 +414,7 @@ public class Main extends Activity implements LocationListener {
 
             email = logged.getString("user_email");
             token = logged.getString("user_token");
-            reserveRequest();
+            if(requestCode == 2) reserveRequest();
         }
         else if(responseCode == -1){
             //This event is full.
@@ -537,6 +541,9 @@ public class Main extends Activity implements LocationListener {
             case R.id.logout:
                 loggedIn = false;
                 break;
+            case R.id.login:
+                login(item);
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -544,12 +551,15 @@ public class Main extends Activity implements LocationListener {
     }
 
     public boolean onPrepareOptionsMenu(Menu menu){
-        MenuItem log = menu.findItem(R.id.logout);
+        MenuItem logOut = menu.findItem(R.id.logout);
+        MenuItem logIn = menu.findItem(R.id.login);
 
         if(loggedIn){
-            log.setVisible(true);
+            logOut.setVisible(true);
+            logIn.setVisible(false);
         } else {
-            log.setVisible(false);
+            logOut.setVisible(false);
+            logIn.setVisible(true);
         }
         return true;
     }

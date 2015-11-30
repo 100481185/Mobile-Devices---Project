@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,15 +23,20 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class ActivityLog extends Activity {
 
     String urlRES = "http://localize-seprojects.rhcloud.com/reservations.json";
+    String urlRESDel = "http://localize-seprojects.rhcloud.com/reservations/";
     JSONArray rsrv = new JSONArray();
     JSONObject user = new JSONObject();
-    private String[] events = null;
-    private String[] eventAuth = null;
+    ArrayAdapter<String> adapt;
+
+    private ArrayList<String> events = null;
+    private ArrayList<String> eventAuth = null;
     private JSONArray arr = new JSONArray();
+    private int delIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,14 +91,14 @@ public class ActivityLog extends Activity {
                 return;
             }
 
-            events = new String[arr.length()];
-            eventAuth = new String[arr.length()];
+            events = new ArrayList<String>();
+            eventAuth = new ArrayList<String>();
             for(int el = 0; el < arr.length(); el++){
                 try{
                     for(int ev = 0; ev < rsrv.length(); ev++){
                         if(arr.getJSONObject(el).getString("promotion_id").equalsIgnoreCase(rsrv.getJSONObject(ev).getString("id"))){
-                            events[el] = rsrv.getJSONObject(ev).getString("title");
-                            eventAuth[el] = arr.getJSONObject(el).getString("id");
+                            events.add(el, rsrv.getJSONObject(ev).getString("title"));
+                            eventAuth.add(el, arr.getJSONObject(el).getString("id"));
                             break;
                         }
                     }
@@ -102,7 +108,7 @@ public class ActivityLog extends Activity {
             }
 
             Spinner eventSpin = (Spinner)findViewById(R.id.spinner);
-            ArrayAdapter<String> adapt = new ArrayAdapter<String>(ActivityLog.this, android.R.layout.simple_spinner_dropdown_item, events);
+            adapt = new ArrayAdapter<String>(ActivityLog.this, android.R.layout.simple_spinner_dropdown_item, events);
             eventSpin.setAdapter(adapt);
             eventSpin.setSelection(0);
 
@@ -110,12 +116,13 @@ public class ActivityLog extends Activity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     TextView chosen = (TextView)findViewById(R.id.eventName);
-                    chosen.setText(events[position]);
+                    chosen.setText(events.get(position));
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
-
+                    TextView chosen = (TextView)findViewById(R.id.eventName);
+                    chosen.setText("");
                 }
             });
 
@@ -135,19 +142,10 @@ public class ActivityLog extends Activity {
     }
 
     public void reservationCode(View view){
-        String key = null;
         TextView chosen = (TextView)findViewById(R.id.eventName);
         String name = chosen.getText().toString();
-        for(int ev = 0; ev < rsrv.length(); ev++){
-            try{
-                if(name.equalsIgnoreCase(events[ev])){
-                    key = eventAuth[ev];
-                    break;
-                }
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
+        String key = getKey(name);
+
         Intent codeIntent = new Intent(ActivityLog.this, ReservationCode.class);
         Bundle k = new Bundle();
         k.putString("key", key);
@@ -156,23 +154,73 @@ public class ActivityLog extends Activity {
         startActivity(codeIntent);
     }
 
-    //todo: cancel reservation of event
-    public void cancelReservation(View view){
-        CancelReservation cancelled = new CancelReservation();
-        cancelled.execute(urlRES);
+    private String getKey(String name){
+        for(int ev = 0; ev < rsrv.length(); ev++){
+            try{
+                if(name.equalsIgnoreCase(events.get(ev))){
+                    delIndex = ev;
+                    return eventAuth.get(ev);
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return "";
     }
 
+    public void cancelReservation(View view){
+        TextView chosen = (TextView)findViewById(R.id.eventName);
+        String name = chosen.getText().toString();
+        String key = getKey(name);
+
+        CancelReservation cancelled = new CancelReservation();
+        cancelled.execute(urlRESDel + key + ".json");
+    }
+
+    //todo: make cancellation functional
     class CancelReservation extends AsyncTask<String, Void, String>{
         private Exception exception = null;
 
         protected String doInBackground(String... params){
+            try {
+                URL url = new URL(params[0]);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("DELETE");
+                conn.setChunkedStreamingMode(0);
+
+                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                exception = e;
+            }
             return "";
         }
+
         protected void onPostExecute(String result){
             if (exception != null) {
                 exception.printStackTrace();
                 return;
             }
+
+            events.remove(delIndex);
+            eventAuth.remove(delIndex);
+
+            Toast.makeText(getApplicationContext(), "Delete successful!", Toast.LENGTH_LONG).show();
+            adapt.notifyDataSetChanged();
+
+            TextView chosen = (TextView)findViewById(R.id.eventName);
+            if(delIndex == events.size()){
+                if(events.isEmpty()){
+                    chosen.setText("");
+                } else {
+                    chosen.setText(events.get(delIndex-1));
+                }
+            } else {
+                chosen.setText(events.get(delIndex));
+            }
+
         }
     }
 }
