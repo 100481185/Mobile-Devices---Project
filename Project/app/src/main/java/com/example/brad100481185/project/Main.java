@@ -296,12 +296,21 @@ public class Main extends Activity implements LocationListener {
         }
     }
 
-    //todo: proceed to event log activity
+    //proceed to event log activity
     public void eventLog(MenuItem item){
         if(loggedIn){
             Intent logIntent = new Intent(Main.this, ActivityLog.class);
             Bundle e = new Bundle();
-            e.putString("data", arr.toString());
+            e.putString("dat", arr.toString());
+            try{
+                JSONObject u = new JSONObject();
+                u.put("customer_email", email);
+                u.put("customer_token", token);
+                e.putString("user", u.toString());
+            } catch(Exception ex){
+                ex.printStackTrace();
+            }
+            logIntent.putExtras(e);
             startActivity(logIntent);
         } else {
             Toast.makeText(getApplicationContext(), "You need to log in first.", Toast.LENGTH_LONG).show();
