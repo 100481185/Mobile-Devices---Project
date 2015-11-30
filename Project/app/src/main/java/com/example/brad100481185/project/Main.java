@@ -497,9 +497,15 @@ public class Main extends Activity implements LocationListener {
                         obj.remove("quantity");
                         obj.put("quantity", quantity);
                         arr.put(objIndex, obj);
-                        Toast.makeText(getApplicationContext(), "Reservation success", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), response.getString("message").replace("[", "").replace("]", "").replace("\"", ""), Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(getApplicationContext(), "Reservation failed", Toast.LENGTH_LONG).show();
+                        if(response.getString("errors").contains("valid_to")){
+                            Toast.makeText(getApplicationContext(), response.getJSONObject("errors").getString("valid_to").replace("[", "").replace("]", "").replace("\"", ""), Toast.LENGTH_LONG).show();
+                        } else if(response.getString("errors").contains("reservation")){
+                            Toast.makeText(getApplicationContext(), response.getJSONObject("errors").getString("reservation").replace("[", "").replace("]", "").replace("\"", ""), Toast.LENGTH_LONG).show();
+                        } else if(response.getString("errors").contains("quantity")){
+                            Toast.makeText(getApplicationContext(), response.getJSONObject("errors").getString("quantity").replace("[", "").replace("]", "").replace("\"", ""), Toast.LENGTH_LONG).show();
+                        }
                     }
                 } else {
                     //Unable to connect
@@ -553,11 +559,17 @@ public class Main extends Activity implements LocationListener {
     public boolean onPrepareOptionsMenu(Menu menu){
         MenuItem logOut = menu.findItem(R.id.logout);
         MenuItem logIn = menu.findItem(R.id.login);
+        MenuItem pref = menu.findItem(R.id.preferences);
+        MenuItem act = menu.findItem(R.id.activity_log);
 
         if(loggedIn){
+            pref.setVisible(true);
+            act.setVisible(true);
             logOut.setVisible(true);
             logIn.setVisible(false);
         } else {
+            pref.setVisible(false);
+            act.setVisible(false);
             logOut.setVisible(false);
             logIn.setVisible(true);
         }
