@@ -134,7 +134,6 @@ public class ActivityLog extends Activity {
     }
 
     //proceed to review activity
-    //todo: obtain reviews for activity
     public void review(View view){
         TextView chosen = (TextView)findViewById(R.id.eventName);
         String name = chosen.getText().toString();
@@ -185,7 +184,7 @@ public class ActivityLog extends Activity {
         cancelled.execute(urlRESDel + key + ".json");
     }
 
-    //todo: make cancellation functional
+    //make cancellation functional (NOT SAVED IN SERVER)
     class CancelReservation extends AsyncTask<String, Void, String>{
         private Exception exception = null;
         private String error = null;

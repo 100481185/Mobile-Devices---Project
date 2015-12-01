@@ -28,8 +28,8 @@ public class WriteReview extends Activity {
         dat.putString("review", review);
 
         RatingBar star = (RatingBar)findViewById(R.id.ratingBar);
-        int rate = star.getNumStars();
-        star.setNumStars(0);
+        float rate = star.getRating();
+        star.setRating(0);
         dat.putString("rating", String.valueOf(rate));
 
         save.putExtras(dat);
@@ -43,7 +43,7 @@ public class WriteReview extends Activity {
         rev.setText("");
 
         RatingBar star = (RatingBar)findViewById(R.id.ratingBar);
-        star.setNumStars(0);
+        star.setRating(0);
 
         setResult(0);
         finish();

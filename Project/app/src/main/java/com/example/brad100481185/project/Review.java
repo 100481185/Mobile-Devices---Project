@@ -37,7 +37,7 @@ public class Review extends Activity {
 
         if(responseCode == 1){
             Bundle rev = resultIntent.getExtras();
-            reviews.add(rev.getString("review")+" "+rev.getString("rating")+" stars");
+            reviews.add(rev.getString("review")+"\n"+rev.getString("rating")+" stars");
             reviewAdapt.notifyDataSetChanged();
         }
     }

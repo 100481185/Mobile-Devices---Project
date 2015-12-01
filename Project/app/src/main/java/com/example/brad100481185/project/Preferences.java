@@ -12,7 +12,7 @@ public class Preferences extends Activity {
         setContentView(R.layout.activity_preferences);
     }
 
-    //todo: pressing the save button
+    //pressing the save button (NOT IMPLEMENTED)
     public void save(View view){
         //do something
         finish();

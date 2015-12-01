@@ -182,8 +182,10 @@ public class Main extends Activity implements LocationListener {
                     in.close();
                     str = sb.toString();
 
-                    //todo: sort by how close an event is to location
-                    //(involves private doubles latitude and longitude
+                    /*sort by how close an event is to location
+                     (involves private doubles latitude and longitude)
+                     (NOT IMPLEMENTED)
+                    */
 
                     //parse string to JSON array
                     arr = new JSONArray(str);
@@ -339,7 +341,7 @@ public class Main extends Activity implements LocationListener {
         }
     }
 
-    //todo: proceed to preferences activity
+    //proceed to preferences activity (NOT IMPLEMENTED)
     public void preferences(MenuItem item){
         if(loggedIn){
             Intent preferenceIntent = new Intent(Main.this, Preferences.class);
