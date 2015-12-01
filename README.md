@@ -46,8 +46,6 @@ The following features were planned to be implemented in the app, but were not f
 
 3. Filter events by user preferences (display only events with categories chosen by the user)
 
-4. 
-
 
 ---Constraints---
 
