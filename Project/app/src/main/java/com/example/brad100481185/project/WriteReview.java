@@ -1,6 +1,7 @@
 package com.example.brad100481185.project;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,14 +19,21 @@ public class WriteReview extends Activity {
 
     //saves review dialogs and empties them afterwards
     public void saveReview(View view){
-        //todo: save review
+        Intent save = new Intent(Intent.ACTION_PICK);
+        Bundle dat = new Bundle();
+
         EditText rev = (EditText)findViewById(R.id.editText);
         String review = rev.getText().toString();
         rev.setText("");
+        dat.putString("review", review);
 
         RatingBar star = (RatingBar)findViewById(R.id.ratingBar);
         int rate = star.getNumStars();
         star.setNumStars(0);
+        dat.putString("rating", String.valueOf(rate));
+
+        save.putExtras(dat);
+        setResult(1, save);
         finish();
     }
 
@@ -36,6 +44,8 @@ public class WriteReview extends Activity {
 
         RatingBar star = (RatingBar)findViewById(R.id.ratingBar);
         star.setNumStars(0);
+
+        setResult(0);
         finish();
     }
 }
