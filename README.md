@@ -46,6 +46,8 @@ The following features were planned to be implemented in the app, but were not f
 
 3. Filter events by user preferences (display only events with categories chosen by the user)
 
+4. Reviews for events; basic implementation is included, but with no post request to obtain or update reviews from server
+
 
 ---Constraints---
 
