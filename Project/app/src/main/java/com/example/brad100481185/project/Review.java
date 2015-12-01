@@ -21,7 +21,7 @@ public class Review extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
 
-        //post request to obtain actual reviews for events (NOT IMPLEMENTED)
+        //post request to obtain actual reviews for events (NOT COMPLETE)
         reviewList = (ListView)findViewById(R.id.listView2);
         reviewAdapt = new ArrayAdapter<String>(Review.this, android.R.layout.simple_list_item_1, reviews);
         reviewList.setAdapter(reviewAdapt);

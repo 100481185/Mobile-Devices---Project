@@ -213,7 +213,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/caption8"
                     android:layout_gravity="center_horizontal|top|left"
-                    android:layout_marginTop="100dp"   />
+                    android:layout_marginTop="50dp"   />
             </FrameLayout>
 
             <FrameLayout android:layout_marginLeft="20dp"
@@ -237,7 +237,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/caption9"
                     android:layout_gravity="center_horizontal|top|left"
-                    android:layout_marginTop="50dp"  />
+                    android:layout_marginTop="100dp"  />
             </FrameLayout>
 
             <FrameLayout
@@ -260,7 +260,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/caption10"
                     android:layout_gravity="center_horizontal|left|top"
-                    android:layout_marginTop="80dp"  />
+                    android:layout_marginTop="50dp"  />
             </FrameLayout>
 
         </GridLayout>

@@ -51,4 +51,4 @@ The following features were planned to be implemented in the app, but were not f
 
 ---Constraints---
 
-1. User's reservations are not updated as new reservations are added
+1. User's reservations are not updated as new reservations are added; the list of current reservations remain the same in the event log activity
